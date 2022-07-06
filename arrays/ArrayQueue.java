@@ -7,21 +7,17 @@ import java.util.Queue;
 
 public class ArrayQueue<T> {
 
-  Factory<T> f;
-
   T[] a;
   int j;
   int n;
 
-  public ArrayQueue(Class<T> t) {
+  public ArrayQueue() {
 
-    f = new Factory<T>(t);
-    a = f.newArray();
-    a = b;
+    a = (T[]) new Object[] {0};
     j = 0;
   }
 
-  boolean add(T x) {
+  public boolean add(T x) {
 
     if(n + 1 > a.length) {
       resize();
@@ -33,7 +29,7 @@ public class ArrayQueue<T> {
 
   }
 
-  T remove() {
+  public T remove() {
 
     if (n == 0) {
       throw new NoSuchElementException();
@@ -46,11 +42,13 @@ public class ArrayQueue<T> {
 
       resize();
     }
+   
+    return x;
   
   }
 
-  void resize() {
-    T[] b = newArray(max(1,n * 2));
+  public void resize() {
+    T[] b = (T[]) new Object[] {(Math.max(1,n * 2))};
     for(int k = 0; k < n; k++) {
 
       b[k] = a[(j+k) % a.length];
@@ -58,6 +56,17 @@ public class ArrayQueue<T> {
     
     a = b;
     j = 0;
+  }
+
+  public void print() {
+
+    System.out.printf("j: %d %nn:%d %n",j,n);
+
+    for (int i = 0 : a) {
+
+      System.out.printf("%d ",a[i]);
+    }
+
   }
 
 }
