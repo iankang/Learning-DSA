@@ -15,6 +15,7 @@ public class ArrayQueue<T> {
 
     a = (T[]) new Object[] {0};
     j = 0;
+    n = 0;
   }
 
   public boolean add(T x) {
