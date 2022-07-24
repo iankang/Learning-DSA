@@ -13,6 +13,15 @@ public class MyArrayListTest {
 
     arrayList.set(0,5);
     arrayList.printStatus();
+
+    arrayList.remove(0);
+    arrayList.printStatus();
+
+    arrayList.remove(0);
+    arrayList.printStatus();
+
+    arrayList.get(2);
+    arrayList.printStatus();
   }
 
 }
