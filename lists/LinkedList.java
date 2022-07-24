@@ -3,10 +3,10 @@ package com.kangethe.datastructures;
 
 import com.kangethe.datastructures.SLNode;
 
-public class LinkedList {
+public class LinkedList<T> {
 
-  SLNode head;
-  SLNode tail;
+  SLNode<T> head;
+  SLNode<T> tail;
   int n;
 
   T push(T x) {
