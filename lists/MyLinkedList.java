@@ -2,35 +2,18 @@
 package com.kangethe.datastructures;
 
 import java.util.*;
-import java.util.ConcurrentModificationException;
-import java.util.NoSuchElementException;
+import com.kangethe.datastructures.Node;
 
 public class MyLinkedList<T> implements Iterable<T> {
 
+
   private int theSize;
-  private int modCount =0;
+  private int modCount = 0;
   private Node<T> beginMarker;
   private Node<T> endMarker;
 
-
-  private static class Node<T> {
-
-    public T data;
-    public Node<T> previous;
-    public Node<T> next;
-   
-    
-    public Node(T data, Node<T> previous, Node<T> next) {
-
-      data = data;
-      previous = previous;
-      next = next;
-    }
-
-  }
-
   public MyLinkedList() {
-    
+    System.out.println("initializing MyLinkedList");
     doClear();
   }
 
@@ -41,8 +24,9 @@ public class MyLinkedList<T> implements Iterable<T> {
 
   public void doClear() {
 
+    System.out.println("doClear");
     beginMarker = new Node<T>(null,null,null);
-    endMarker = new Node<T>(null,null,null);
+    endMarker = new Node<T>(null,beginMarker,null);
     beginMarker.next = endMarker;
   
     theSize = 0;
@@ -89,18 +73,36 @@ public class MyLinkedList<T> implements Iterable<T> {
   }
 
   private void addBefore(Node<T> p, T x) {
-    
-    Node<T> newNode = new Node<T>(x, p.prev,p);
-    newNode.prev.next = newNode;
-    p.prev = newNode;
+
+    Node<T> newNode; 
+    if(p.previous != null) {
+      newNode = new Node<T>(x, p.previous,p);
+    } else {
+      newNode = new Node<T>(x, null, p)
+    }
+
+    if (beginMarker == null) {
+
+      beginMarker = newNode;
+      endMarker = newNode;
+    } else {
+
+      endMarker.next = newNode;
+      
+    }
+   
+    if(newNode.previous != null){
+      newNode.previous.next = newNode;
+    }
+    p.previous = newNode;
     theSize++;
     modCount++;
   }
 
   private T remove(Node<T> p) {
     
-    p.next.prev = p.prev;
-    p.prev.next = p.next;
+    p.next.previous = p.previous;
+    p.previous.next = p.next;
     theSize--;
     modCount++;
 
@@ -133,12 +135,16 @@ public class MyLinkedList<T> implements Iterable<T> {
       p = endMarker;
       for (int i = size(); i > idx; i-- ) {
 
-        p = p.prev;
+        p = p.previous;
       }
     }
     return p;
   }
 
+  public Iterator<T> iterator(){
+  
+    return new LinkedListIterator();
+  }
   private class LinkedListIterator implements Iterator<T> {
 
     private Node<T> current = beginMarker.next;
@@ -157,7 +163,7 @@ public class MyLinkedList<T> implements Iterable<T> {
         throw new ConcurrentModificationException();
       }
       
-       if (!hasNext) {
+       if (!hasNext()) {
 
         throw new NoSuchElementException();
       }
@@ -180,10 +186,12 @@ public class MyLinkedList<T> implements Iterable<T> {
         throw new IllegalStateException();
       }
  
-      MyLinkedList.remove(current.prev);
+      MyLinkedList.this.remove(current.previous);
       expectedModCount++;
       okToRemove = false;
     }
   }
+
+
 
 }
